@@ -3,7 +3,7 @@
   //  - ternary operator
   #include<stdio.h>
   int main()
-  {
+  { 
     int a,b;
     printf("enter 1st no\n");
     scanf("%d",&a);
@@ -21,3 +21,4 @@
     return 0;
 
   }
+   
