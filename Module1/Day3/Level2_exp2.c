@@ -16,6 +16,7 @@ void decimal_to_bcd(unsigned char *bcd, unsigned char decimal) {
     *bcd = DEC_TO_BCD(decimal);
 }
 
+
 int main() {
     unsigned char decimal = 45;  
     unsigned char bcd;

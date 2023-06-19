@@ -12,7 +12,6 @@ Concepts to be used.
 */
 
 #include <stdio.h>
-
 void print_numbers(int n) {
     int i;
     for (i = 1; i <= n; i++) {
