@@ -7,6 +7,7 @@ Example Structure :
     };
 Write a function to swap 2 members in different indexes (based on user input) in the above array of structures
 */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
