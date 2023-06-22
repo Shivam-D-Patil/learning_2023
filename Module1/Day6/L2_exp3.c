@@ -1,67 +1,80 @@
 /*
-Example Structure : 
-    struct Student{
-        int rollno;
-        char name[20];
-        float marks;
-    };
-Write a function to swap 2 members in different indexes (based on user input) in the above array of structures
+Implement structures to read, write and compute average- marks and the students scoring above
+   and below the average marks for a class of N students.
 */
-
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 struct Student {
-    int rollno;
-    char name[20];
+    char name[50];
     float marks;
 };
 
-void swapStudents(struct Student* students, int index1, int index2) {
-    struct Student temp = students[index1];
-    students[index1] = students[index2];
-    students[index2] = temp;
+void readStudents(struct Student* students, int n) {
+    for (int i = 0; i < n; i++) {
+        printf("Enter name and marks for student %d: ", i + 1);
+        scanf("%s %f", students[i].name, &students[i].marks);
+    }
 }
 
-void displayStudents(const struct Student* students, int numStudents) {
+void displayStudents(struct Student* students, int n) {
     printf("Student Data:\n");
     printf("---------------------\n");
 
-    for (int i = 0; i < numStudents; i++) {
-        printf("Student %d:\n", i + 1);
-        printf("Roll No: %d\n", students[i].rollno);
+    for (int i = 0; i < n; i++) {
         printf("Name: %s\n", students[i].name);
         printf("Marks: %.2f\n", students[i].marks);
         printf("---------------------\n");
     }
 }
 
-int main() {
-    struct Student students[] = {
-        {1001, "Aron", 90.00},
-        {1002, "Bob", 85.50},
-        {1003, "Charlie", 92.75},
-        {1004, "David", 88.25},
-        {1005, "Eva", 95.50}
-    };
+float calculateAverage(struct Student* students, int n) {
+    float sum = 0;
 
-    int numStudents = sizeof(students) / sizeof(struct Student);
-
-    printf("Before swapping:\n");
-    displayStudents(students, numStudents);
-
-    int index1, index2;
-    printf("Enter the indexes of the students to swap (0-%d): ", numStudents - 1);
-    scanf("%d %d", &index1, &index2);
-
-    if (index1 >= 0 && index1 < numStudents && index2 >= 0 && index2 < numStudents) {
-        swapStudents(students, index1, index2);
-        printf("After swapping:\n");
-        displayStudents(students, numStudents);
-    } else {
-        printf("Invalid indexes. Swapping failed.\n");
+    for (int i = 0; i < n; i++) {
+        sum += students[i].marks;
     }
+
+    return sum / n;
+}
+
+void displayAboveBelowAverage(struct Student* students, int n) {
+    float average = calculateAverage(students, n);
+
+    printf("Students scoring above average:\n");
+    printf("---------------------\n");
+
+    for (int i = 0; i < n; i++) {
+        if (students[i].marks > average) {
+            printf("Name: %s\n", students[i].name);
+            printf("Marks: %.2f\n", students[i].marks);
+            printf("---------------------\n");
+        }
+    }
+
+    printf("Students scoring below average:\n");
+    printf("---------------------\n");
+
+    for (int i = 0; i < n; i++) {
+        if (students[i].marks < average) {
+            printf("Name: %s\n", students[i].name);
+            printf("Marks: %.2f\n", students[i].marks);
+            printf("---------------------\n");
+        }
+    }
+}
+
+int main() {
+    int numStudents;
+
+    printf("Enter the number of students: ");
+    scanf("%d", &numStudents);
+
+    struct Student students[numStudents];
+
+    readStudents(students, numStudents);
+    displayStudents(students, numStudents);
+    displayAboveBelowAverage(students, numStudents);
 
     return 0;
 }

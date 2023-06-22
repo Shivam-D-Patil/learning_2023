@@ -1,37 +1,73 @@
 /*
-File Copy: Write a C program to copy a file using file operations
+Assume User will be providing input in the form of a string as show below. 
+Write a function to parse the string and initialize an array of structures. 
+
+Example String : "1001 Aron 100.00" 
+Example Structure : 
+    struct Student{
+        int rollno;
+        char name[20];
+        float marks;
+    };
 */
-
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+struct Student {
+    int rollno;
+    char name[20];
+    float marks;
+};
+
+void parseStringToStructArray(const char* inputString, struct Student* students, int numStudents) {
+    const char* delimiter = " ";
+    char* token;
+
+    token = strtok((char*)inputString, delimiter);
+
+    for (int i = 0; i < numStudents; i++) {
+  
+        students[i].rollno = atoi(token);
+ 
+        token = strtok(NULL, delimiter);
+        strcpy(students[i].name, token);
+ 
+        token = strtok(NULL, delimiter);
+        students[i].marks = atof(token);
+
+        token = strtok(NULL, delimiter);
+    }
+}
+
+void displayStudentArray(const struct Student* students, int numStudents) {
+    for (int i = 0; i < numStudents; i++) {
+        printf("Student %d:\n", i + 1);
+        printf("Roll No: %d\n", students[i].rollno);
+        printf("Name: %s\n", students[i].name);
+        printf("Marks: %.2f\n", students[i].marks);
+        printf("---------------------\n");
+    }
+}
+
 int main() {
-    FILE *file1, *file2;
-    char path1[100], path2[100];
-    char ch;
-    printf("Enter the path of the file1: ");
-    scanf("%s", path1);
-    printf("Enter the path of the file2: ");
-    scanf("%s", path2);
+    int numStudents;
 
-    file1 = fopen(path1, "r");
-    if (file1 == NULL) {
-        printf("Unable to open file1.\n");
-        return 1;
-    }
+    printf("Enter the number of students: ");
+    scanf("%d", &numStudents);
+ 
+    while (getchar() != '\n');
 
-    file2 = fopen(path2, "w");
-    if (file2 == NULL) {
-        printf("Unable to create file2.\n");
-        fclose(file1);
-        return 1;
-    }
+    char inputString[100];
+    printf("Enter the student data (rollno name marks): ");
+    fgets(inputString, sizeof(inputString), stdin);
 
-    while ((ch = fgetc(file1)) != EOF) {
-        fputc(ch, file2);
-    }
-    fclose(file1);
-    fclose(file2);
+    struct Student* students = (struct Student*)malloc(numStudents * sizeof(struct Student));
 
-    printf("Contents of file1 copied to file2 successfully.\n");
+    parseStringToStructArray(inputString, students, numStudents);
+    displayStudentArray(students, numStudents);
+
+    free(students);
 
     return 0;
 }

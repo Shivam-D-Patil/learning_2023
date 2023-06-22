@@ -1,91 +1,34 @@
 /*
-Example Structure : 
-    struct Student{
-        int rollno;
-        char name[20];
-        float marks;
-    };
-2. Write a function to delete a member at the start of the above array of structures
-Note : Code must use Dynamic Memory concept
+Write a program to enter to Cartesian coordinate points and display the distance between them.
 */
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <math.h>
 
-struct Student {
-    int rollno;
-    char name[20];
-    float marks;
+struct Point {
+    float x;
+    float y;
 };
 
-void deleteStudent(struct Student** students, int* numStudents) {
-    if (*numStudents == 0) {
-        printf("No students to delete.\n");
-        return;
-    }
+float calculateDistance(struct Point p1, struct Point p2) {
+    float distance;
 
-    (*numStudents)--;
+    distance = sqrt(pow((p2.x - p1.x), 2) + pow((p2.y - p1.y), 2));
 
-    struct Student* newStudents = (struct Student*)realloc(*students, (*numStudents) * sizeof(struct Student));
-
-    if (newStudents == NULL) {
-        printf("Memory reallocation failed. Student could not be deleted.\n");
-        return;
-    }
-
-    *students = newStudents;
-
-    printf("Deleted student:\n");
-    printf("Roll No: %d\n", (*students)[0].rollno);
-    printf("Name: %s\n", (*students)[0].name);
-    printf("Marks: %.2f\n", (*students)[0].marks);
-
-    // Shift the remaining students by one position to the beginning of the array
-    memmove(*students, *students + 1, (*numStudents) * sizeof(struct Student));
-}
-
-void displayStudents(const struct Student* students, int numStudents) {
-    printf("Student Data:\n");
-    printf("---------------------\n");
-
-    for (int i = 0; i < numStudents; i++) {
-        printf("Student %d:\n", i + 1);
-        printf("Roll No: %d\n", students[i].rollno);
-        printf("Name: %s\n", students[i].name);
-        printf("Marks: %.2f\n", students[i].marks);
-        printf("---------------------\n");
-    }
+    return distance;
 }
 
 int main() {
-    struct Student* students = NULL;
-    int numStudents = 0;
+    struct Point point1, point2;
 
-    // Add some sample students
-    struct Student student1 = {1001, "Aron", 90.00};
-    struct Student student2 = {1002, "Bob", 85.50};
-    struct Student student3 = {1003, "Charlie", 92.75};
+    printf("Enter the coordinates of point 1 (x y): ");
+    scanf("%f %f", &point1.x, &point1.y);
 
-    students = (struct Student*)malloc(3 * sizeof(struct Student));
-    if (students == NULL) {
-        printf("Memory allocation failed.\n");
-        return 1;
-    }
+    printf("Enter the coordinates of point 2 (x y): ");
+    scanf("%f %f", &point2.x, &point2.y);
 
-    students[0] = student1;
-    students[1] = student2;
-    students[2] = student3;
-    numStudents = 3;
+    float distance = calculateDistance(point1, point2);
 
-    printf("Before deletion:\n");
-    displayStudents(students, numStudents);
-
-    deleteStudent(&students, &numStudents);
-
-    printf("After deletion:\n");
-    displayStudents(students, numStudents);
-
-    free(students);
+    printf("Distance between the two points: %.2f\n", distance);
 
     return 0;
 }

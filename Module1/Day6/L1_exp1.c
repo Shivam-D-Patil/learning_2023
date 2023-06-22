@@ -1,73 +1,41 @@
 /*
-Assume User will be providing input in the form of a string as show below. 
-Write a function to parse the string and initialize an array of structures. 
-
-Example String : "1001 Aron 100.00" 
-Example Structure : 
-    struct Student{
-        int rollno;
-        char name[20];
-        float marks;
-    };
+Use structures to find the volume and the total surface area of the box. 
+   You need to access the members of the structure with the help of a structure pointer:
+    a. With the help of (*) asterisk or indirection operator and (.) dot operator.
+    b. With the help of ( -> ) Arrow operator using pointer as well as dot representation.
 */
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
-struct Student {
-    int rollno;
-    char name[20];
-    float marks;
+struct Box {
+    double length;
+    double width;
+    double height;
 };
 
-void parseStringToStructArray(const char* inputString, struct Student* students, int numStudents) {
-    const char* delimiter = " ";
-    char* token;
-
-    token = strtok((char*)inputString, delimiter);
-
-    for (int i = 0; i < numStudents; i++) {
-  
-        students[i].rollno = atoi(token);
- 
-        token = strtok(NULL, delimiter);
-        strcpy(students[i].name, token);
- 
-        token = strtok(NULL, delimiter);
-        students[i].marks = atof(token);
-
-        token = strtok(NULL, delimiter);
-    }
-}
-
-void displayStudentArray(const struct Student* students, int numStudents) {
-    for (int i = 0; i < numStudents; i++) {
-        printf("Student %d:\n", i + 1);
-        printf("Roll No: %d\n", students[i].rollno);
-        printf("Name: %s\n", students[i].name);
-        printf("Marks: %.2f\n", students[i].marks);
-        printf("---------------------\n");
-    }
-}
-
 int main() {
-    int numStudents;
+     
+    struct Box myBox;
+    struct Box* boxPtr;
 
-    printf("Enter the number of students: ");
-    scanf("%d", &numStudents);
- 
-    while (getchar() != '\n');
+    boxPtr = &myBox;
 
-    char inputString[100];
-    printf("Enter the student data (rollno name marks): ");
-    fgets(inputString, sizeof(inputString), stdin);
+    // Taking inputs
+    printf("Enter the length: ");
+    scanf("%lf", &(boxPtr->length));
 
-    struct Student* students = (struct Student*)malloc(numStudents * sizeof(struct Student));
+    printf("Enter the width: ");
+    scanf("%lf", &(boxPtr->width));
 
-    parseStringToStructArray(inputString, students, numStudents);
-    displayStudentArray(students, numStudents);
+    printf("Enter the height: ");
+    scanf("%lf", &(boxPtr->height));
 
-    free(students);
+    // Calculating Volume
+    double volume = boxPtr->length * boxPtr->width * boxPtr->height;
+    printf("Volume: %.2f\n", volume);
+
+    // Calculating surface area
+    double surfaceArea = 2 * (boxPtr->length * boxPtr->width + boxPtr->length * boxPtr->height + boxPtr->width * boxPtr->height);
+    printf("Total Surface Area: %.2f\n", surfaceArea);
 
     return 0;
 }

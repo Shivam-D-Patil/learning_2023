@@ -1,43 +1,45 @@
-
 /*
-Example String : "1001 Aron 100.00" 
-Example Structure : 
-    struct Student{
-        int rollno;
-        char name[20];
-        float marks;
-    };
-    Write a function to display all members in the above array of structures
+Write a program using structures to calculate the difference between two time periods using a user-defined function.
 */
+
 #include <stdio.h>
-
-struct Student {
-    int rollno;
-    char name[20];
-    float marks;
+ 
+struct Time {
+    int hours;
+    int minutes;
+    int seconds;
 };
+ 
+struct Time calculateTimeDifference(struct Time t1, struct Time t2) {
+    struct Time diff;
 
-void displayStudents(const struct Student* students, int numStudents) {
+    // Convert both time periods to seconds
+    int totalSeconds1 = t1.hours * 3600 + t1.minutes * 60 + t1.seconds;
+    int totalSeconds2 = t2.hours * 3600 + t2.minutes * 60 + t2.seconds;
 
-    for (int i = 0; i < numStudents; i++) {
-        printf("Student %d:\n", i + 1);
-        printf("Roll No: %d\n", students[i].rollno);
-        printf("Name: %s\n", students[i].name);
-        printf("Marks: %.2f\n", students[i].marks);
-    }
+    // Calculate the difference in seconds
+    int differenceSeconds = totalSeconds2 - totalSeconds1;
+
+    // Convert the difference back to hours, minutes, and seconds
+    diff.hours = differenceSeconds / 3600;
+    diff.minutes = (differenceSeconds % 3600) / 60;
+    diff.seconds = (differenceSeconds % 3600) % 60;
+
+    return diff;
 }
 
 int main() {
-    
-    struct Student students[] = {
-        {1001, "Aron", 100.00},
-        {1002, "Bob", 95.50},
-        {1003, "Charlie", 87.75}
-    };
-
-    int numStudents = sizeof(students) / sizeof(struct Student);
-
-    displayStudents(students, numStudents);
+    struct Time time1, time2, difference;
+ 
+    printf("Enter the first time period (hours minutes seconds): ");
+    scanf("%d %d %d", &time1.hours, &time1.minutes, &time1.seconds);
+ 
+    printf("Enter the second time period (hours minutes seconds): ");
+    scanf("%d %d %d", &time2.hours, &time2.minutes, &time2.seconds);
+ 
+    difference = calculateTimeDifference(time1, time2);
+ 
+    printf("\nDifference: %d hours, %d minutes, %d seconds\n", difference.hours, difference.minutes, difference.seconds);
 
     return 0;
 }

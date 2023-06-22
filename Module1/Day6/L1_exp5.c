@@ -1,62 +1,49 @@
 /*
-Example String : "1001 Aron 100.00" 
-Example Structure : 
-    struct Student{
-        int rollno;
-        char name[20];
-        float marks;
-    };
-    Write a function to sort the array of structures in descending order based on marks 
+Write a program to demonstrate the swapping the fields of two structures using pointers
 */
 
 #include <stdio.h>
-#include <string.h>
-
-struct Student {
-    int rollno;
-    char name[20];
-    float marks;
+ 
+struct Person {
+    char name[50];
+    int age;
 };
+ 
+void swapFields(struct Person* p1, struct Person* p2) {
+ 
+    char tempName[50];
+    strcpy(tempName, p1->name);
+    strcpy(p1->name, p2->name);
+    strcpy(p2->name, tempName);
 
-int searchStudentByName(const struct Student* students, int numStudents, const char* name) {
-    for (int i = 0; i < numStudents; i++) {
-        if (strcmp(students[i].name, name) == 0) {
-            return i;  
-        }
-    }
-    return -1;  
-}
-
-void displayStudent(const struct Student* student) {
-    printf("Roll No: %d\n", student->rollno);
-    printf("Name: %s\n", student->name);
-    printf("Marks: %.2f\n", student->marks);
+  
+    int tempAge = p1->age;
+    p1->age = p2->age;
+    p2->age = tempAge;
 }
 
 int main() {
-    struct Student students[] = {
-        {1001, "Shivam", 100.00},
-        {1002, "Vivek", 95.50},
-        {1003, "Sanket", 87.75},
-        {1004, "Manish", 92.25},
-        {1005, "Partik", 80.50}
-    };
-
-    int numStudents = sizeof(students) / sizeof(struct Student);
-
-    char searchName[20];
-    printf("Enter the name to search: ");
-    scanf("%s", searchName);
-
-    int index = searchStudentByName(students, numStudents, searchName);
-
-    if (index != -1) {
-        printf("Student found!\n");
-        printf("Student Details:\n");
-        displayStudent(&students[index]);
-    } else {
-        printf("Student not found.\n");
-    }
+    struct Person person1, person2;
+ 
+    printf("Enter the name of person1: ");
+    scanf("%s", person1.name);
+    printf("Enter the age of person1: ");
+    scanf("%d", &person1.age);
+ 
+    printf("Enter the name of person2: ");
+    scanf("%s", person2.name);
+    printf("Enter the age of person2: ");
+    scanf("%d", &person2.age);
+ 
+    printf("\nOriginal Data:\n");
+    printf("Person1: %s, %d years old\n", person1.name, person1.age);
+    printf("Person2: %s, %d years old\n", person2.name, person2.age);
+ 
+    swapFields(&person1, &person2);
+ 
+    printf("\nSwapped Data:\n");
+    printf("Person1: %s, %d years old\n", person1.name, person1.age);
+    printf("Person2: %s, %d years old\n", person2.name, person2.age);
 
     return 0;
 }

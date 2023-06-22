@@ -1,68 +1,64 @@
 /*
-Example Structure : 
-    struct Student{
-        int rollno;
-        char name[20];
-        float marks;
-    };
-Write a function to add a member at the end of the above array of structures
-Note : Code must use Dynamic Memory concept
+Data Parser:
+   A data logger transmits the data in ascii format as shown below
+   "S1-T:36.5-H:100-L:50"
+   Write a function to populate all the data in an array of structure. The output should be like
+   Sensor Info:
+   ---------------------
+   Sensor ID: S1
+   Temperature: 36.5 C
+   Humidity: 100
+   Light Intensity: 50%
 */
+
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
-struct Student {
-    int rollno;
-    char name[20];
-    float marks;
-};
+#define MAX_DATA_SIZE 100
 
-void addStudent(struct Student** students, int* numStudents) {
-    (*numStudents)++;
-    struct Student* newStudents = (struct Student*)realloc(*students, (*numStudents) * sizeof(struct Student));
+ 
+struct SensorInfo {
+    char sensorID[10];
+    float temperature;
+    int humidity;
+    int lightIntensity;
+}; 
+void populateSensorInfo(struct SensorInfo* sensorArray, const char* dataString, int arraySize) {
+    int i = 0;
+    const char* delimiter = "-";
 
-    if (newStudents == NULL) {
-        printf("Memory allocation failed. Student could not be added.\n");
-        return;
+    char* token = strtok(dataString, delimiter);
+    while (token != NULL && i < arraySize) {
+        sscanf(token, "S%s-T:%f-H:%d-L:%d", sensorArray[i].sensorID, &sensorArray[i].temperature,
+               &sensorArray[i].humidity, &sensorArray[i].lightIntensity);
+
+        token = strtok(NULL, delimiter);
+        i++;
     }
-
-    *students = newStudents;
-
-    struct Student* newStudent = &((*students)[(*numStudents) - 1]);
-
-    printf("Enter Roll No: ");
-    scanf("%d", &(newStudent->rollno));
-    printf("Enter Name: ");
-    scanf("%s", newStudent->name);
-    printf("Enter Marks: ");
-    scanf("%f", &(newStudent->marks));
 }
-
-void displayStudents(const struct Student* students, int numStudents) {
-    printf("Student Data:\n");
+ 
+void displaySensorInfo(const struct SensorInfo* sensorArray, int arraySize) {
+    printf("Sensor Info:\n");
     printf("---------------------\n");
 
-    for (int i = 0; i < numStudents; i++) {
-        printf("Student %d:\n", i + 1);
-        printf("Roll No: %d\n", students[i].rollno);
-        printf("Name: %s\n", students[i].name);
-        printf("Marks: %.2f\n", students[i].marks);
+    for (int i = 0; i < arraySize; i++) {
+        printf("Sensor ID: %s\n", sensorArray[i].sensorID);
+        printf("Temperature: %.1f C\n", sensorArray[i].temperature);
+        printf("Humidity: %d\n", sensorArray[i].humidity);
+        printf("Light Intensity: %d%%\n", sensorArray[i].lightIntensity);
         printf("---------------------\n");
     }
 }
 
 int main() {
-    struct Student* students = NULL;
-    int numStudents = 0;
-
-    addStudent(&students, &numStudents);
-    addStudent(&students, &numStudents);
-    addStudent(&students, &numStudents);
-
-    displayStudents(students, numStudents);
-
-    free(students);
+    char data[MAX_DATA_SIZE] = "S1-T:36.5-H:100-L:50";
+    int numSensors = 1;
+ 
+    struct SensorInfo sensorArray[numSensors];
+ 
+    populateSensorInfo(sensorArray, data, numSensors);
+ 
+    displaySensorInfo(sensorArray, numSensors);
 
     return 0;
 }
